@@ -29,3 +29,58 @@ export async function getUser(userId, isAdmin = false, isMe = false) {
         return null;
     }
 }
+
+export async function getUsers(orderBy = 'ASC', startWith, isAdmin) {
+    try {
+        let params = [];
+
+        if (orderBy.toLowerCase() != 'asc' || orderBy.toLowerCase() != 'desc') {
+            orderBy = 'asc'
+        }
+
+        let query = `
+        SELECT
+            id, firstname, lastname, email, is_admin
+        FROM
+            users
+        `;
+      
+        // Si startWith est défini on ajoute une condition where
+        if (startWith != undefined && startWith.trim() !== '') {
+            query += `
+            WHERE
+                firstname LIKE ?% OR lastname LIKE ?%
+            `;
+            params.push(startWith);
+            params.push(startWith);
+        }        
+
+        // Ajout de la limitation et order by
+        query += `
+        LIMIT 50
+        ORDER BY
+            lastname ?,
+            firstname ?
+        `; 
+        params.push(orderBy);
+        params.push(orderBy);
+
+        const db = await getDB();
+        let users = [];
+
+        await db.each(query, params, (err, row) => {
+            if (isAdmin) {
+                let completeUser = new CompleteUser(row.id, row.firstname, row.lastname, row.is_admin, row.email);
+                users.push(completeUser);
+            } else {
+                let basicUser = new BasicUser(row.id, row.firstname, row.lastname, row.is_admin);
+                users.push(basicUser);
+            }
+        });
+
+        return users;
+    } catch (err) {
+        console.error(err);
+        return [];
+    }
+}
