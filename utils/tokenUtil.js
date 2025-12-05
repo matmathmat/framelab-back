@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-const apikey = 'TMVEsWCCIK9Fopuf-Beauty-Bell-Nation-Replace-Increase-Spin-Limited-Step-Ate-XawqBYSD6srIUFCl';
+const apikey = process.env.SECRET_KEY;
 
 export function signToken(data) {
     return jwt.sign(data, apikey);
