@@ -1,10 +1,11 @@
 import * as userService from "../services/userService.js";
 
 export default class BasicUser {
-  constructor(id, firstname, lastname) {
+  constructor(id, firstname, lastname, isAdmin) {
     this.id = id;
     this.firstname = firstname;
     this.lastname = lastname;
+    this.isAdmin = isAdmin;
   }
 
   static async getById(userId) {
@@ -17,7 +18,8 @@ export default class BasicUser {
     return new BasicUser(
       userData.id,
       userData.firstname,
-      userData.lastname
+      userData.lastname,
+      userData.isAdmin
     );
   }
 }
