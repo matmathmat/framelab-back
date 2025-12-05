@@ -1,11 +1,31 @@
+import * as challengeService from "../services/challengeService.js";
+
 export default class Challenge {
-    constructor(id, titleTheme, descriptionTheme, PhotorUrl, startDate, endDate, isArchived) {
+    constructor(id, titleTheme, descriptionTheme, photoUrl, startDate, endDate, isArchived) {
         this.id = id;
         this.titleTheme = titleTheme;
         this.descriptionTheme = descriptionTheme;
-        this.PhotorUrl = PhotorUrl;
+        this.photoUrl = photoUrl;
         this.startDate = startDate;
         this.endDate = endDate;
         this.isArchived = isArchived;
+    }
+
+    static async getById(challengeId) {
+        const challengeData = await challengeService.getChallenge(challengeId);
+        
+        if (!challengeData) {
+            return undefined;
+        }
+
+        return new Challenge(
+            challengeData.id,
+            challengeData.titleTheme,
+            challengeData.descriptionTheme,
+            challengeData.photoUrl,
+            challengeData.startDate,
+            challengeData.endDate,
+            challengeData.isArchived
+        );
     }
 }
