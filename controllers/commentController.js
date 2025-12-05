@@ -28,33 +28,33 @@ export async function getcomments(request, response) {
     }
 }
 
-// export async function getcomment(request, response) {
-//     try {
-//         const commentID = request.param.id;
-//         const userId = request.user_id;
+export async function getcomment(request, response) {
+    try {
+        const commentID = request.param.id;
+        const userId = request.userId;
 
-//         if (commentID == undefined || userId == undefined) {
-//             return responseUtil.setInvalidRequest(response);
-//         } 
+        if (commentID == undefined || userId == undefined) {
+            return responseUtil.setInvalidRequest(response);
+        } 
         
-//         const comment = await commentModel.getCommentById(commentID);
+        const comment = await commentModel.getCommentById(commentID);
 
-//         if (comment == undefined) {
-//              return responseUtil.setCustomNotFound(response, 'Commentaire introuvable');
-//         }
+        if (comment == undefined) {
+             return responseUtil.setCustomNotFound(response, 'Commentaire introuvable');
+        }
 
-//         // Création de l'objet final
-//         let output = [];
-//         comments.forEach(comment => {
-//             output.push(serializeComment(comment));
-//         });
+        // Création de l'objet final
+        let output = [];
+        comments.forEach(comment => {
+            output.push(serializeComment(comment));
+        });
 
-//         return responseUtil.setOk(response, output);
-//     } catch (err) {
-//         console.error(err);
-//         return responseUtil.setInternalServer(response);  
-//     }
-// }
+        return responseUtil.setOk(response, output);
+    } catch (err) {
+        console.error(err);
+        return responseUtil.setInternalServer(response);  
+    }
+}
 
 // export async function postComment(request, response) {
 //     try {
