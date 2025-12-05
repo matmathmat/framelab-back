@@ -10,6 +10,10 @@ export async function authentification(request, response, next) {
         // Pas de cookie token ? on essaye de l'obtenir depuis l'authorisation
         const bearerToken = request.headers.authorization;
 
+        if (bearerToken == undefined) {
+            return responseUtil.setMissingToken(response);
+        }
+
         // Si le token ne contient pas d'autorization ou qu'il est trop short
         if (!bearerToken.includes('Bearer') || bearerToken.length < 7) {
             return responseUtil.setMissingToken(response);
