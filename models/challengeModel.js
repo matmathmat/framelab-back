@@ -1,4 +1,5 @@
 import * as challengeService from "../services/challengeService.js";
+import { addParticipation, getParticipationByChallengeIdAndUserId } from "../services/participationService.js";
 
 export default class Challenge {
     constructor(id, titleTheme, descriptionTheme, photoUrl, startDate, endDate, isArchived) {
@@ -27,5 +28,9 @@ export default class Challenge {
             challengeData.endDate,
             challengeData.isArchived
         );
+    }
+
+    async addParticipation(photoUrl, userId) {
+        return await addParticipation(this.id, photoUrl, userId);
     }
 }
