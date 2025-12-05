@@ -5,8 +5,8 @@ import * as participationController from "../controllers/participationController
 
 const participationRouter = Router();
 
-participationRouter.get("/participations", authController.authentification, commentController.getParticipations);
-participationRouter.get("/participations/:id", authController.authentification, commentController.getParticipation);
-participationRouter.post("/participations", authController.authentification, commentController.postParticipation);
+participationRouter.get("/participations", authController.authentification, participationController.getParticipations);
+participationRouter.get("/participations/:id", authController.authentification, participationController.getParticipation);
+participationRouter.post("/participations", authController.authentification, participationController.postParticipation);
 
 export default participationRouter;
