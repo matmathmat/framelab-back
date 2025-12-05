@@ -1,10 +1,13 @@
 import express from "express";
+import cookieParser from 'cookie-parser';
+
 // import router from "./router.js";
 // import swaggerUi from "swagger-ui-express";
 // import swaggerDocument from "../../doc/api/api.json" with { type: "json" };
 
 // Creation du serveur
 const app = express();
+app.use(cookieParser())
 app.use(express.json());
 
 // Routes API
