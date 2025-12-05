@@ -1,9 +1,10 @@
 import express from "express";
 import cookieParser from 'cookie-parser';
 
-// import router from "./router.js";
 // import swaggerUi from "swagger-ui-express";
 // import swaggerDocument from "../../doc/api/api.json" with { type: "json" };
+
+import commentRouter from "./routers/commentRouter.js";
 
 // Creation du serveur
 const app = express();
@@ -11,7 +12,7 @@ app.use(cookieParser())
 app.use(express.json());
 
 // Routes API
-// app.use("/api", router);
+app.use("/api", commentRouter);
 // app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Exposer le dossier public
