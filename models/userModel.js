@@ -23,3 +23,26 @@ export default class BasicUser {
     );
   }
 }
+
+export class CompleteUser extends BasicUser {
+  constructor(id, firstname, lastname, isAdmin, email) {
+    super(id, firstname, lastname, isAdmin);
+    this.email = email;
+  }
+
+  static async getById(userId) {
+    const userData = await userService.getUser(userId);
+    
+    if (!userData) {
+      return undefined;
+    }
+
+    return new CompleteUser(
+      userData.id,
+      userData.firstname,
+      userData.lastname,
+      userData.isAdmin,
+      userData.email
+    );
+  }
+}
