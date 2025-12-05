@@ -4,7 +4,13 @@ import BasicUser, { CompleteUser } from '../models/userModel.js';
 
 export async function getUser(userId, isAdmin = false, isMe = false) {
     try {
-        const query = `SELECT * FROM users WHERE id = ?`;
+        const query = `
+        SELECT
+            id, firstname, lastname, email, is_admin
+        FROM users
+        WHERE
+            id = ?
+        `;
 
         const db = await getDB();
         const user = await db.get(query, [userId]);
