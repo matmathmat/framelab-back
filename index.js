@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser';
 import commentRouter from "./routers/commentRouter.js";
 import voteRouter from "./routers/voteRouter.js";
 import userRouter from "./routers/userRouter.js";
+import participationRouter from "./routers/participationRouter.js";
 
 import upploadRouter from "./routers/uploadRouter.js";
 
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use("/api", commentRouter);
 app.use("/api", voteRouter);
 app.use("/api", userRouter);
+app.use("/api", participationRouter);
 // app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Exposer le dossier public
