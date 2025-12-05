@@ -7,14 +7,27 @@ export default class BasicUser {
     this.lastname = lastname;
     this.isAdmin = isAdmin;
   }
-
+  
   static async getById(userId) {
     const userData = await userService.getUser(userId);
     
     if (!userData) {
       return undefined;
     }
+    return new BasicUser(
+      userData.id,
+      userData.firstname,
+      userData.lastname,
+      userData.isAdmin
+    );
+  }
 
+  static async getByEmail(email) {
+    const userData = await userService.getUserByEmail(email);
+    
+    if (!userData) {
+      return undefined;
+    }
     return new BasicUser(
       userData.id,
       userData.firstname,
@@ -29,14 +42,28 @@ export class CompleteUser extends BasicUser {
     super(id, firstname, lastname, isAdmin);
     this.email = email;
   }
-
+  
   static async getById(userId) {
     const userData = await userService.getUser(userId);
     
     if (!userData) {
       return undefined;
     }
+    return new CompleteUser(
+      userData.id,
+      userData.firstname,
+      userData.lastname,
+      userData.isAdmin,
+      userData.email
+    );
+  }
 
+  static async getByEmail(email) {
+    const userData = await userService.getUserByEmail(email);
+    
+    if (!userData) {
+      return undefined;
+    }
     return new CompleteUser(
       userData.id,
       userData.firstname,

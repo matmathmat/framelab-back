@@ -32,6 +32,36 @@ export async function getUser(userId, isAdmin = false, isMe = false) {
     }
 }
 
+export async function getUserByEmail(email) {
+    try {
+        const query = `
+        SELECT
+            id, firstname, lastname, email, is_admin
+        FROM users
+        WHERE
+            email = ?
+        `;
+        
+        const db = await getDB();
+        const user = await db.get(query, [email]);
+        
+        if (user != undefined) {
+            return new CompleteUser(
+                user.id, 
+                user.firstname, 
+                user.lastname, 
+                user.is_admin, 
+                user.email
+            );
+        } else {
+            return null;
+        }
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+}
+
 export async function getUsers(orderBy, startWith, isAdmin) {
     try {
         let params = [];
