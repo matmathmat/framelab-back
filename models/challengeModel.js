@@ -1,8 +1,8 @@
 import * as challengeService from "../services/challengeService.js";
-import { addParticipation, getParticipationByChallengeIdAndUserId } from "../services/participationService.js";
+import { addParticipation } from "../services/participationService.js";
 
 export default class Challenge {
-    constructor(id, titleTheme, descriptionTheme, photoUrl, startDate, endDate, isArchived) {
+    constructor(id, titleTheme, descriptionTheme, photoUrl, startDate, endDate, isArchived, user) {
         this.id = id;
         this.titleTheme = titleTheme;
         this.descriptionTheme = descriptionTheme;
@@ -10,6 +10,7 @@ export default class Challenge {
         this.startDate = startDate;
         this.endDate = endDate;
         this.isArchived = isArchived;
+        this.user = user;
     }
 
     static async getById(challengeId) {
@@ -26,7 +27,8 @@ export default class Challenge {
             challengeData.photoUrl,
             challengeData.startDate,
             challengeData.endDate,
-            challengeData.isArchived
+            challengeData.isArchived,
+            challengeData.user
         );
     }
 
