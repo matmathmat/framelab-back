@@ -1,10 +1,10 @@
 import { verifyToken } from "../utils/tokenUtil.js";
 import * as responseUtil from "../utils/responseUtil.js";
-import { userIdExists } from "../services/userService.js";
+import { getUser } from "../services/userService.js";
 
 export async function authentification(request, response, next) {
     // on cherche le token dans les cookies
-    let token = req.cookies.token;
+    let token = request.cookies.token;
 
     if (token == undefined) {
         // Pas de cookie token ? on essaye de l'obtenir depuis l'authorisation
@@ -39,14 +39,14 @@ export async function authentification(request, response, next) {
     const userId = tokenData['userId'];
 
     // On verifie que l'utilisateur existe
-    const userExists = await userIdExists(userId);
-    if (!userExists) {
+    const user = await getUser(userId);
+    if (!user) {
         return responseUtil.setInvalidToken(response);
     }
     
     // Si on a passé toutes ces étapes ça signifie que l'utilisateur existe
     // on ajoute l'user id à la request
-    request.userId = userId;
+    request.userId = user.id;
 
     // fin du middlewar
     next();
