@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 // import swaggerDocument from "../../doc/api/api.json" with { type: "json" };
 
 import commentRouter from "./routers/commentRouter.js";
+import upploadRouter from "./routers/uploadRouter.js";
 
 // Creation du serveur
 const app = express();
@@ -17,6 +18,9 @@ app.use("/api", commentRouter);
 
 // Exposer le dossier public
 app.use("/", express.static("public"));
+
+// test upload
+app.use("/", upploadRouter);
 
 // Demarrage du serveur sur le port 3000
 app.listen(3000, () => {
