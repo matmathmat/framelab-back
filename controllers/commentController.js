@@ -33,9 +33,6 @@ export async function getcomment(request, response) {
         const commentId = request.params.id;
         const userId = request.userId;
 
-        console.log('userId', userId);
-        console.log('commentID', commentId);
-
         if (commentId == undefined || userId == undefined) {
             return responseUtil.setInvalidRequest(response);
         } 
@@ -70,7 +67,7 @@ export async function postComment(request, response) {
         }
 
         const comment = await participation.addComment(textContent, userId);
-        
+
         if (comment != null) {
             return responseUtil.setOk(response, comment);
         } else {
