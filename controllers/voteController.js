@@ -1,7 +1,8 @@
 import * as responseUtil from "../utils/responseUtil.js";
-
 import * as voteService from "../services/voteService.js";
-import * as participationService from "../services/participationService.js";
+
+import Participation from "../models/participationModel.js";
+import Vote from "../models/voteModel.js";
 
 export async function getVotes(request, response) {
     try {
@@ -12,12 +13,12 @@ export async function getVotes(request, response) {
             return responseUtil.setInvalidRequest(response);
         } 
         
-        const participation = await participationService.getParticipation(participationId);
+        const participation = await Participation.getById(participationId);
 
         if (!participation) {
             return responseUtil.setCustomNotFound(response, 'Participation introuvable');
-        }        
-
+        }
+        
         const votes = await voteService.getVotesByParticipationId(participation.id);
 
         return responseUtil.setOk(response, votes);
@@ -36,9 +37,9 @@ export async function getVote(request, response) {
             return responseUtil.setInvalidRequest(response);
         } 
         
-        const vote = await voteService.getVote(voteId);
+        const vote = await Vote.getById(voteId);
 
-        if (vote == null) {
+        if (!vote) {
              return responseUtil.setCustomNotFound(response, 'Vote introuvable');
         }
 
@@ -65,7 +66,7 @@ export async function postVote(request, response) {
             return responseUtil.setInvalidRequest(response);
         }
 
-        const participation = await participationService.getParticipation(participationId);
+        const participation = await Participation.getById(participationId);
 
         if (!participation) {
             return responseUtil.setCustomNotFound(response, 'Participation introuvable');
@@ -82,7 +83,7 @@ export async function postVote(request, response) {
         }
 
         const vote = await participation.addVote(creativityNote, technicNote, respectNote, userId);
-
+        
         if (vote != null) {
             return responseUtil.setOk(response, vote);
         } else {
@@ -92,4 +93,4 @@ export async function postVote(request, response) {
         console.error(err);
         return responseUtil.setInternalServer(response);        
     }
-}    
+}

@@ -1,5 +1,6 @@
 import { addComment } from "../services/commentService.js";
 import { addVote, getVoteByParticipationIdAndUserId } from "../services/voteService.js";
+import * as participationService from "../services/participationService.js";
 
 export default class Participation {
     constructor(id, photoUrl, submissionDate, isVisible, user) {
@@ -8,6 +9,22 @@ export default class Participation {
         this.submissionDate = submissionDate;
         this.isVisible = isVisible;
         this.user = user;
+    }
+
+    static async getById(participationId) {
+        const participationData = await participationService.getParticipation(participationId);
+        
+        if (!participationData) {
+            return undefined;
+        }
+
+        return new Participation(
+            participationData.id,
+            participationData.photoUrl,
+            participationData.submissionDate,
+            participationData.isVisible,
+            participationData.user
+        );
     }
 
     async addComment(textContent, userId) {

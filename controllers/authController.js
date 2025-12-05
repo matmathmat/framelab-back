@@ -1,9 +1,10 @@
 import { verifyToken } from "../utils/tokenUtil.js";
 import * as responseUtil from "../utils/responseUtil.js";
-import { getUser } from "../services/userService.js";
+
+import BasicUser from "../models/userModel.js";
 
 export async function authentification(request, response, next) {
-    // on cherche le token dans les cookies
+    // On cherche le token dans les cookies
     let token = request.cookies.token;
 
     if (token == undefined) {
@@ -43,7 +44,7 @@ export async function authentification(request, response, next) {
     const userId = tokenData['userId'];
 
     // On verifie que l'utilisateur existe
-    const user = await getUser(userId);
+    const user = await BasicUser.getById(userId);
     if (!user) {
         return responseUtil.setInvalidToken(response);
     }
@@ -51,7 +52,7 @@ export async function authentification(request, response, next) {
     // Si on a passé toutes ces étapes ça signifie que l'utilisateur existe
     // on ajoute l'user id à la request
     request.userId = user.id;
-
+    
     // fin du middlewar
     next();
 }

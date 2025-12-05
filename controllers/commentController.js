@@ -1,7 +1,8 @@
 import * as responseUtil from "../utils/responseUtil.js";
-
 import * as commentService from "../services/commentService.js";
-import * as participationService from "../services/participationService.js";
+
+import Comment from "../models/commentModel.js";
+import Participation from "../models/participationModel.js";
 
 export async function getcomments(request, response) {
     try {
@@ -13,7 +14,7 @@ export async function getcomments(request, response) {
             return responseUtil.setInvalidRequest(response);
         } 
         
-        const participation = await participationService.getParticipation(participationId);
+        const participation = await Participation.getById(participationId);
 
         if (!participation) {
             return responseUtil.setCustomNotFound(response, 'Participation introuvable');
@@ -37,9 +38,9 @@ export async function getcomment(request, response) {
             return responseUtil.setInvalidRequest(response);
         } 
         
-        const comment = await commentService.getComment(commentId);
+        const comment = await Comment.getById(commentId);
 
-        if (comment == null) {
+        if (!comment) {
              return responseUtil.setCustomNotFound(response, 'Commentaire introuvable');
         }
 
@@ -60,7 +61,7 @@ export async function postComment(request, response) {
             return responseUtil.setInvalidRequest(response);
         }
 
-        const participation = await participationService.getParticipation(participationId);
+        const participation = await Participation.getById(participationId);
 
         if (!participation) {
             return responseUtil.setCustomNotFound(response, 'Participation introuvable');
@@ -77,4 +78,4 @@ export async function postComment(request, response) {
         console.error(err);
         return responseUtil.setInternalServer(response);        
     }
-}    
+}
