@@ -32,13 +32,9 @@ export async function getUser(userId, isAdmin = false, isMe = false) {
     }
 }
 
-export async function getUsers(orderBy = 'ASC', startWith, isAdmin) {
+export async function getUsers(orderBy, startWith, isAdmin) {
     try {
         let params = [];
-
-        if (orderBy.toLowerCase() != 'asc' || orderBy.toLowerCase() != 'desc') {
-            orderBy = 'asc'
-        }
 
         let query = `
         SELECT
@@ -51,21 +47,37 @@ export async function getUsers(orderBy = 'ASC', startWith, isAdmin) {
         if (startWith != undefined && startWith.trim() !== '') {
             query += `
             WHERE
-                firstname LIKE ?% OR lastname LIKE ?%
+                firstname LIKE ?
+                OR lastname LIKE ?
             `;
-            params.push(startWith);
-            params.push(startWith);
+            params.push(startWith + '%');
+            params.push(startWith + '%');
         }
 
-        // Ajout de la limitation et order by
+        if (!orderBy) {
+            // Si order by est non défini on trie par id
+            query += `
+            ORDER BY
+                id ASC
+            `;
+        } else {
+            // On check si orderBy est valide sinon on lui affecte ASC
+            orderBy = orderBy.toUpperCase();
+            if (orderBy !== 'ASC' && orderBy !== 'DESC') {
+                orderBy = 'ASC';
+            }
+
+            query += `
+            ORDER BY
+                lastname ${orderBy},
+                firstname ${orderBy}
+            `;
+        }        
+
+        // On ajoute une limitation
         query += `
         LIMIT 50
-        ORDER BY
-            lastname ?,
-            firstname ?
         `;
-        params.push(orderBy);
-        params.push(orderBy);
 
         const db = await getDB();
         let users = [];
