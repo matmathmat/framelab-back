@@ -1,4 +1,5 @@
 import { addComment } from "../services/commentService.js";
+import { addVote, getVoteByParticipationIdAndUserId } from "../services/voteService.js";
 
 export default class Participation {
     constructor(id, photoUrl, submissionDate, isVisible, user) {
@@ -11,5 +12,13 @@ export default class Participation {
 
     async addComment(textContent, userId) {
         return await addComment(this.id, textContent, userId);
+    }
+
+    async addVote(creativityNote, technicNote, respectNote, userId) {
+        return await addVote(this.id, creativityNote, technicNote, respectNote, userId);
+    }    
+
+    async getVoteByParticipationIdAndUserId(userId) {
+        return await getVoteByParticipationIdAndUserId(this.id, userId);
     }
 }

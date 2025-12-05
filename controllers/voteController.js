@@ -15,7 +15,7 @@ export async function getVotes(request, response) {
         const participation = await participationService.getParticipation(participationId);
 
         if (!participation) {
-            return responseUtil.setCustomNotFound(response, 'Vote introuvable');
+            return responseUtil.setCustomNotFound(response, 'Participation introuvable');
         }        
 
         const votes = await voteService.getVotesByParticipationId(participation.id);
@@ -52,10 +52,16 @@ export async function getVote(request, response) {
 export async function postVote(request, response) {
     try {
         const participationId = request.body.participationId;
-        const textContent = request.body.textContent;
+        const creativityNote = request.body.creativityNote;
+        const technicNote = request.body.technicNote;
+        const respectNote = request.body.respectNote;
         const userId = request.userId;
 
-        if (participationId == undefined || textContent == undefined || userId == undefined) {
+        if (participationId == undefined
+            || creativityNote == undefined
+            || technicNote == undefined
+            || respectNote == undefined
+        ) {
             return responseUtil.setInvalidRequest(response);
         }
 
@@ -65,10 +71,20 @@ export async function postVote(request, response) {
             return responseUtil.setCustomNotFound(response, 'Participation introuvable');
         }
 
-        const comment = await participation.addComment(textContent, userId);
+        if (participation.user.id == userId) {
+            return responseUtil.setCustomError(response, 403, 'Vous ne pouvez pas voté pour votre participation.');
+        }
 
-        if (comment != null) {
-            return responseUtil.setOk(response, comment);
+        const alreadyVoted = await participation.getVoteByParticipationIdAndUserId(userId);
+
+        if (alreadyVoted != undefined) {
+            return responseUtil.setCustomError(response, 409, 'Vous avez déjà voté pour cette participation');
+        }
+
+        const vote = await participation.addVote(creativityNote, technicNote, respectNote, userId);
+
+        if (vote != null) {
+            return responseUtil.setOk(response, vote);
         } else {
             return responseUtil.setInternalServer(response);
         }
