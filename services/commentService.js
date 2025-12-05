@@ -10,16 +10,14 @@ export async function getComment(commentId) {
             comments.id, comments.text_content, comments.comment_date, comments.user_id, comments.participation_id,
             users.firstname, users.lastname
         FROM comments
-        INNER
-            JOIN users ON comments.user_id = users.id
+        INNER JOIN
+            users ON comments.user_id = users.id
         WHERE
             comments.id = ?
         `;
 
         const db = await getDB();
         const row = await db.get(query, [commentId]);
-
-        console.log("row", row);
 
         if (row != undefined) {
             let basicUser = new BasicUser(row.user_id, row.firstname, row.lastname);
@@ -67,31 +65,28 @@ export async function getCommentsByParticipationId(participationId, page = 1) {
     }
 }
 
-// export async function addComment(participationId, textContent, userId) {
-//     try {
-//         const db = await getDB();
+export async function addComment(participationId, textContent, userId) {
+    try {
+        const db = await getDB();
 
-//         // On insère le commentaire
-//         const query = `
-//       INSERT INTO comments (text_content, user_id, participation_id)
-//       VALUES (?, ?, ?)
-//     `;
+        // On insère le commentaire
+        const query = `
+            INSERT INTO comments (text_content, user_id, participation_id)
+            VALUES (?, ?, ?)
+        `;
 
-//         const result = await db.run(query, [textContent, userId, participationId]);
+        const result = await db.run(query, [textContent, userId, participationId]);
 
-//         // On récupère l'id du commentaire
-//         const insertedId = result.lastID;
+        // On récupère l'id du commentaire
+        const insertedId = result.lastID;
 
-//         // On récupère les informations du commentaire
-//         const comment = await db.get(
-//             "SELECT * FROM comments WHERE id = ?",
-//             [insertedId]
-//         );
+        // On récupère les informations du commentaire
+        const newComment = await getComment(insertedId);
 
-//         return comment;
+        return newComment;
 
-//     } catch (err) {
-//         console.error(err);
-//         return null;
-//     }
-// }
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+}

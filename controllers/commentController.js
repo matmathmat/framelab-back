@@ -13,13 +13,13 @@ export async function getcomments(request, response) {
             return responseUtil.setInvalidRequest(response);
         } 
         
-        const participationExists = await participationService.participationExists(participationId);
+        const participation = await participationService.getParticipation(participationId);
 
-        if (!participationExists) {
+        if (!participation) {
             return responseUtil.setCustomNotFound(response, 'Participation introuvable');
         }        
 
-        const comments = await commentService.getCommentsByParticipationId(participationId, selectedPage);
+        const comments = await commentService.getCommentsByParticipationId(participation.id, selectedPage);
 
         return responseUtil.setOk(response, comments);
     } catch (err) {
@@ -53,31 +53,31 @@ export async function getcomment(request, response) {
     }
 }
 
-// export async function postComment(request, response) {
-//     try {
-//         const participationId = request.body.participation_id;
-//         const textContent = request.body.text_content;
-//         const userId = request.user_id;
+export async function postComment(request, response) {
+    try {
+        const participationId = request.body.participationId;
+        const textContent = request.body.textContent;
+        const userId = request.userId;
 
-//         if (participationId == undefined || textContent == undefined || userId == undefined) {
-//             return responseUtil.setInvalidRequest(response);
-//         }
+        if (participationId == undefined || textContent == undefined || userId == undefined) {
+            return responseUtil.setInvalidRequest(response);
+        }
 
-//         const participationExists = await participationModel.participationExists(participationId);
+        const participation = await participationService.getParticipation(participationId);
 
-//         if (!participationExists) {
-//             return responseUtil.setCustomNotFound(response, 'Participation introuvable');
-//         }
+        if (!participation) {
+            return responseUtil.setCustomNotFound(response, 'Participation introuvable');
+        }
 
-//         const comment = await commentModel.addComment(participationId, textContent, userId);
-
-//         if (comment != null) {
-//             return responseUtil.setOk(response, comment);
-//         } else {
-//             return responseUtil.setInternalServer(response);
-//         }
-//     } catch (err) {
-//         console.error(err);
-//         return responseUtil.setInternalServer(response);        
-//     }
-// }    
+        const comment = await participation.addComment(textContent, userId);
+        
+        if (comment != null) {
+            return responseUtil.setOk(response, comment);
+        } else {
+            return responseUtil.setInternalServer(response);
+        }
+    } catch (err) {
+        console.error(err);
+        return responseUtil.setInternalServer(response);        
+    }
+}    
