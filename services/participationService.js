@@ -1,6 +1,6 @@
 import { getDB } from "../database/database.js";
 
-export async function participationExists(participationId) {
+export async function getParticipation(participationId) {
   try {
       const query = `
         SELECT * FROM participations WHERE id = ?
