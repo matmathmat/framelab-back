@@ -1,3 +1,5 @@
+import bcrypt from "bcrypt";
+
 import { getDB } from "../database/database.js";
 
 import BasicUser, { CompleteUser } from '../models/userModel.js';
@@ -44,7 +46,7 @@ export async function getUsers(orderBy = 'ASC', startWith, isAdmin) {
         FROM
             users
         `;
-      
+
         // Si startWith est défini on ajoute une condition where
         if (startWith != undefined && startWith.trim() !== '') {
             query += `
@@ -53,7 +55,7 @@ export async function getUsers(orderBy = 'ASC', startWith, isAdmin) {
             `;
             params.push(startWith);
             params.push(startWith);
-        }        
+        }
 
         // Ajout de la limitation et order by
         query += `
@@ -61,7 +63,7 @@ export async function getUsers(orderBy = 'ASC', startWith, isAdmin) {
         ORDER BY
             lastname ?,
             firstname ?
-        `; 
+        `;
         params.push(orderBy);
         params.push(orderBy);
 
@@ -82,5 +84,37 @@ export async function getUsers(orderBy = 'ASC', startWith, isAdmin) {
     } catch (err) {
         console.error(err);
         return [];
+    }
+}
+
+export async function addUser(email, password, firstname, lastname) {
+    try {
+        const db = await getDB();
+
+        // Hash du mot de passe
+        const saltRounds = 10;
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+        // On insère l'utilisateur
+        const query = `
+        INSERT INTO
+            users (email, password, firstname, lastname, is_admin)
+        VALUES
+            (?, ?, ?, ?, 0)
+        `;
+
+        const result = await db.run(query, [email, hashedPassword, firstname, lastname]);
+
+        // On récupère l'id de l'utilisateur
+        const insertedId = result.lastID;
+
+        // On récupère les informations de l'utilisateur (avec email car c'est le créateur)
+        const newUser = await getUser(insertedId, false, true);
+
+        return newUser;
+
+    } catch (err) {
+        console.error(err);
+        return null;
     }
 }
