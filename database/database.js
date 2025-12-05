@@ -4,11 +4,11 @@ import { open } from 'sqlite';
 let db;
 
 export async function getDB() {
-  if (!db) {
-    db = await open({
-      filename: './framelab.db',
-      driver: sqlite3.Database
-    });
-  }
-  return db;
+    if (!db) {
+        db = await open({
+            filename: './framelab.db',
+            driver: sqlite3.Database
+        });
+    }
+    return db;
 }
