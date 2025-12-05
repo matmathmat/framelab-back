@@ -9,3 +9,6 @@ export function signToken(data) {
 export function verifyToken(token) {
     return jwt.verify(token, apikey);
 }
+
+// Créer un token pour les test
+// console.log(signToken({userId: 2}))

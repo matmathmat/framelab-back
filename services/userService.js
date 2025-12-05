@@ -1,21 +1,21 @@
 import { getDB } from "../database/database.js";
 
-export async function userIdExists(userId) {
+import BasicUser from '../models/userModel.js';
+
+export async function getUser(userId) {
   try {
-      const query = `
-        SELECT * FROM users WHERE id = ?
-        `;
+      const query = `SELECT * FROM users WHERE id = ?`;
 
       const db = await getDB();
-      const participation = await db.get(query, [userId]);
+      const user = await db.get(query, [userId]);
 
-      if (participation != undefined) {
-          return true;
+      if (user != undefined) {
+          return new BasicUser(user.id, user.firstname, user.lastname);
       } else {
-          return false;
+          return null;
       }
   } catch (err) {
       console.error(err);
-      return false;
+      return null;
   }
 }
