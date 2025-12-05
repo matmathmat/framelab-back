@@ -15,7 +15,7 @@ export async function getVotes(request, response) {
         const participation = await participationService.getParticipation(participationId);
 
         if (!participation) {
-            return responseUtil.setCustomNotFound(response, 'Participation introuvable');
+            return responseUtil.setCustomNotFound(response, 'Vote introuvable');
         }        
 
         const votes = await voteService.getVotesByParticipationId(participation.id);
