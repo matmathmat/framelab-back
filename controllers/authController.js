@@ -52,6 +52,7 @@ export async function authentification(request, response, next) {
     // Si on a passé toutes ces étapes ça signifie que l'utilisateur existe
     // on ajoute l'user id à la request
     request.userId = user.id;
+    request.isAdmin = user.isAdmin;
     
     // fin du middlewar
     next();
