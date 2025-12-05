@@ -30,26 +30,23 @@ export async function getcomments(request, response) {
 
 export async function getcomment(request, response) {
     try {
-        const commentID = request.param.id;
+        const commentId = request.params.id;
         const userId = request.userId;
 
-        if (commentID == undefined || userId == undefined) {
+        console.log('userId', userId);
+        console.log('commentID', commentId);
+
+        if (commentId == undefined || userId == undefined) {
             return responseUtil.setInvalidRequest(response);
         } 
         
-        const comment = await commentModel.getCommentById(commentID);
+        const comment = await commentService.getComment(commentId);
 
-        if (comment == undefined) {
+        if (comment == null) {
              return responseUtil.setCustomNotFound(response, 'Commentaire introuvable');
         }
 
-        // Création de l'objet final
-        let output = [];
-        comments.forEach(comment => {
-            output.push(serializeComment(comment));
-        });
-
-        return responseUtil.setOk(response, output);
+        return responseUtil.setOk(response, comment);
     } catch (err) {
         console.error(err);
         return responseUtil.setInternalServer(response);  
