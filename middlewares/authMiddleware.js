@@ -2,6 +2,7 @@ import { verifyToken } from "../utils/tokenUtil.js";
 import * as responseUtil from "../utils/responseUtil.js";
 
 import { CompleteUser } from '../models/userModel.js';
+import BannedToken from '../models/bannedTokenModel.js';
 
 export async function authentification(request, response, next) {
     // On cherche le token dans les cookies
@@ -23,6 +24,12 @@ export async function authentification(request, response, next) {
         // on obtient le token, il faut enlever Bearer 
         token = bearerToken.split(' ')[1];        
     }
+
+    // On vérifie si le token est banni
+    const isBanned = await BannedToken.isTokenBanned(token);
+    if (isBanned) {
+        return responseUtil.setInvalidToken(response);
+    }    
 
     // On vérifie la validité du token
     let tokenData;
