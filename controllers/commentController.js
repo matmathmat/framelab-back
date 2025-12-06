@@ -1,5 +1,4 @@
 import * as responseUtil from "../utils/responseUtil.js";
-import * as commentService from "../services/commentService.js";
 
 import Comment from "../models/commentModel.js";
 import Participation from "../models/participationModel.js";
@@ -20,7 +19,7 @@ export async function getcomments(request, response) {
             return responseUtil.setCustomNotFound(response, 'Participation introuvable');
         }        
 
-        const comments = await commentService.getCommentsByParticipationId(participation.id, selectedPage);
+        const comments = await participation.getComments(selectedPage);
 
         return responseUtil.setOk(response, comments);
     } catch (err) {
