@@ -7,7 +7,7 @@ import Vote from "../models/voteModel.js";
 export async function getVotes(request, response) {
     try {
         const participationId = request.query.participationId;
-        const userId = request.userId;
+        const userId = request.user.id;
 
         if (participationId == undefined || userId == undefined) {
             return responseUtil.setInvalidRequest(response);
@@ -31,7 +31,7 @@ export async function getVotes(request, response) {
 export async function getVote(request, response) {
     try {
         const voteId = request.params.id;
-        const userId = request.userId;
+        const userId = request.user.id;
 
         if (voteId == undefined || userId == undefined) {
             return responseUtil.setInvalidRequest(response);
@@ -56,7 +56,7 @@ export async function postVote(request, response) {
         const creativityNote = request.body.creativityNote;
         const technicNote = request.body.technicNote;
         const respectNote = request.body.respectNote;
-        const userId = request.userId;
+        const userId = request.user.id;
 
         if (participationId == undefined
             || creativityNote == undefined
