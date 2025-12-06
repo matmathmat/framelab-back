@@ -7,12 +7,11 @@ export async function getChallenge(challengeId) {
     try {
         const query = `
         SELECT
-            challenges.id, challenges.title_theme, challenges.description_theme, challenges.photo_url, challenges.start_date, challenges.end_date, challenges.is_archived, challenges.user_id,
-            users.firstname, users.lastname, users.is_admin
-        FROM challenges
-        INNER JOIN
-            users ON challenges.user_id = users.id
-        WHERE challenges.id = ?
+            challenges.id, challenges.title_theme, challenges.description_theme, challenges.photo_url, challenges.start_date, challenges.end_date, challenges.is_archived
+        FROM
+            challenges
+        WHERE
+            challenges.id = ?
         `;
 
         const db = await getDB();
