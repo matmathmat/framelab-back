@@ -1,5 +1,6 @@
 import * as responseUtil from "../utils/responseUtil.js";
-import * as userService from "../services/userService.js";
+
+import { CompleteUser } from "../models/userModel.js";
 
 export async function getUser(request, response) {
     try {
@@ -11,7 +12,7 @@ export async function getUser(request, response) {
             return responseUtil.setInvalidRequest(response);
         }
 
-        const user = await userService.getUser(userId, isAdmin, isMe);
+        const user = await CompleteUser.getById(userId, isAdmin, isMe);
 
         if (!user) {
             return responseUtil.setCustomNotFound(response, 'Utilisateur introuvable');
@@ -30,7 +31,7 @@ export async function getUsers(request, response) {
         const startWith = request.query.startWith;
         const isAdmin = request.user.isAdmin;
 
-        const users = await userService.getUsers(orderBy, startWith, isAdmin);
+        const users = await CompleteUser.getUsers(orderBy, startWith, isAdmin);
 
         return responseUtil.setOk(response, users);
     } catch (err) {
@@ -47,7 +48,7 @@ export async function getMe(request, response) {
             return responseUtil.setInvalidRequest(response);
         }
 
-        const user = await userService.getUser(userId, false, true);
+        const user = await CompleteUser.getById(userId, false, true);
 
         if (!user) {
             return responseUtil.setCustomNotFound(response, 'Utilisateur introuvable');
@@ -80,12 +81,12 @@ export async function postUser(request, response) {
         }
         
         // Vérifier si l'email existe déjà
-        const existingUser = await userService.getUserByEmail(email);
+        const existingUser = await CompleteUser.getByEmail(email);
         if (existingUser) {
             return responseUtil.setCustomError(response, 400, 'Cet email est déjà utilisé');
         }
         
-        const newUser = await userService.addUser(email, password, firstname, lastname);
+        const newUser = await CompleteUser.create(email, password, firstname, lastname);
         if (newUser != null) {
             return responseUtil.setOk(response, newUser);
         } else {
