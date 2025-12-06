@@ -1,5 +1,5 @@
 import { getCommentsByParticipationId, addComment } from "../services/commentService.js";
-import { getVoteByParticipationIdAndUserId, addVote } from "../services/voteService.js";
+import { getVotesByParticipationId, getVoteByParticipationIdAndUserId, addVote } from "../services/voteService.js";
 import { getParticipation } from "../services/participationService.js";
 
 export default class Participation {
@@ -38,6 +38,10 @@ export default class Participation {
     async getComments(page) {
         return await getCommentsByParticipationId(this.id, page);
     }
+
+    async getVotes() {
+        return await getVotesByParticipationId(this.id);
+    }    
 
     async getVoteByParticipationIdAndUserId(userId) {
         return await getVoteByParticipationIdAndUserId(this.id, userId);

@@ -1,5 +1,4 @@
 import * as responseUtil from "../utils/responseUtil.js";
-import * as voteService from "../services/voteService.js";
 
 import Participation from "../models/participationModel.js";
 import Vote from "../models/voteModel.js";
@@ -19,7 +18,7 @@ export async function getVotes(request, response) {
             return responseUtil.setCustomNotFound(response, 'Participation introuvable');
         }
         
-        const votes = await voteService.getVotesByParticipationId(participation.id);
+        const votes = await participation.getVotes();
 
         return responseUtil.setOk(response, votes);
     } catch (err) {
