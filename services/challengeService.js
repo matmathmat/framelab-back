@@ -39,7 +39,7 @@ export async function getChallenge(challengeId) {
 export async function getActiveChallenge() {
     try {
         const now = new Date().toISOString();
-        
+
         const query = `
         SELECT
             challenges.id, challenges.title_theme, challenges.description_theme, challenges.photo_url, challenges.start_date, challenges.end_date, challenges.is_archived
@@ -109,5 +109,32 @@ export async function getChallenges(page = 1) {
     } catch (err) {
         console.error(err);
         return [];
+    }
+}
+
+export async function createChallenge(titleTheme, descriptionTheme, startDate, endDate, photoUrl) {
+    try {
+        const db = await getDB();
+
+        // On insère le challenge
+        const query = `
+            INSERT INTO
+                challenges (title_theme, description_theme, start_date, end_date, photo_url, is_archived)
+            VALUES
+                (?, ?, ?, ?, ?, 0)
+        `;
+
+        const result = await db.run(query, [titleTheme, descriptionTheme, startDate, endDate, photoUrl]);
+
+        // On récupère l'id du challenge
+        const insertedId = result.lastID;
+
+        // On récupère les informations du challenge
+        const newChallenge = await getComment(insertedId);
+
+        return newChallenge;
+    } catch (err) {
+        console.error(err);
+        return null;
     }
 }
