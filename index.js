@@ -10,6 +10,7 @@ import voteRouter from "./routers/voteRouter.js";
 import userRouter from "./routers/userRouter.js";
 import participationRouter from "./routers/participationRouter.js";
 import challengeRouter from "./routers/challengeRouter.js";
+import authRouter from "./routers/authRouter.js";
 
 // Creation du serveur
 const app = express();
@@ -23,6 +24,7 @@ app.use("/api", voteRouter);
 app.use("/api", userRouter);
 app.use("/api", participationRouter);
 app.use("/api", challengeRouter);
+app.use("/api", authRouter);
 // app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Exposer le dossier public
