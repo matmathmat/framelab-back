@@ -40,6 +40,7 @@ export default class Challenge {
         if (!challengeData) {
             return undefined;
         }
+        
         return new Challenge(
             challengeData.id,
             challengeData.titleTheme,
