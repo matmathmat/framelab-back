@@ -8,7 +8,7 @@ export async function getcomments(request, response) {
     try {
         const participationId = request.query.participationId;
         const selectedPage = request.query.page;
-        const userId = request.userId;
+        const userId = request.user.id;
 
         if (participationId == undefined || selectedPage == undefined || userId == undefined) {
             return responseUtil.setInvalidRequest(response);
@@ -32,7 +32,7 @@ export async function getcomments(request, response) {
 export async function getcomment(request, response) {
     try {
         const commentId = request.params.id;
-        const userId = request.userId;
+        const userId = request.user.id;
 
         if (commentId == undefined || userId == undefined) {
             return responseUtil.setInvalidRequest(response);
@@ -55,7 +55,7 @@ export async function postComment(request, response) {
     try {
         const participationId = request.body.participationId;
         const textContent = request.body.textContent;
-        const userId = request.userId;
+        const userId = request.user.id;
 
         if (participationId == undefined || textContent == undefined || userId == undefined) {
             return responseUtil.setInvalidRequest(response);
