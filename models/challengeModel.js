@@ -14,7 +14,7 @@ export default class Challenge {
 
     static async getById(challengeId) {
         const challengeData = await challengeService.getChallenge(challengeId);
-        
+
         if (!challengeData) {
             return undefined;
         }
@@ -30,18 +30,35 @@ export default class Challenge {
         );
     }
 
+    static async getActiveChallenge() {
+        const challengeData = await challengeService.getActiveChallenge();
+        
+        if (!challengeData) {
+            return undefined;
+        }
+        return new Challenge(
+            challengeData.id,
+            challengeData.titleTheme,
+            challengeData.descriptionTheme,
+            challengeData.photoUrl,
+            challengeData.startDate,
+            challengeData.endDate,
+            challengeData.isArchived,
+        );
+    }
+
     static async getChallenges(page = 1) {
         const challenges = await challengeService.getChallenges(page);
         return challenges;
-    }    
+    }
 
     async getParticipations(page) {
         return await getParticipationsByChallengeId(this.id, page);
     }
-    
+
     async getParticipationByUserId(userId) {
         return await getParticipationByChallengeIdAndUserId(this.id, userId);
-    }    
+    }
 
     async addParticipation(photoUrl, userId) {
         return await addParticipation(this.id, photoUrl, userId);
