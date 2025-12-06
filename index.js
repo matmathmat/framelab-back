@@ -8,25 +8,23 @@ import cookieParser from 'cookie-parser';
 import commentRouter from "./routers/commentRouter.js";
 import voteRouter from "./routers/voteRouter.js";
 import userRouter from "./routers/userRouter.js";
-
-import upploadRouter from "./routers/uploadRouter.js";
+import participationRouter from "./routers/participationRouter.js";
 
 // Creation du serveur
 const app = express();
 app.use(cookieParser())
 app.use(express.json());
+app.use(express.urlencoded());
 
 // Routes API
 app.use("/api", commentRouter);
 app.use("/api", voteRouter);
 app.use("/api", userRouter);
+app.use("/api", participationRouter);
 // app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Exposer le dossier public
 app.use("/", express.static("public"));
-
-// test upload
-app.use("/", upploadRouter);
 
 // Demarrage du serveur sur le port 3000
 app.listen(3000, () => {
