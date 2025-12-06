@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 
 import { getDB } from "../database/database.js";
 
-import BasicUser, { CompleteUser } from '../models/userModel.js';
+import BasicUser, { CompleteUser, CompleteUserToken } from '../models/userModel.js';
 
 export async function getUser(userId, isAdmin = false, isMe = false) {
     try {
@@ -56,6 +56,37 @@ export async function getUserByEmail(email) {
         } else {
             return null;
         }
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+}
+
+export async function getUserByEmailWithPassword(email, password) {
+    try {
+        const query = `
+        SELECT
+            id, firstname, lastname, email, password, is_admin
+        FROM users
+        WHERE
+            email = ?
+        `;
+        
+        const db = await getDB();
+        const user = await db.get(query, [email]);
+        
+        if (user == undefined) {
+            return null;
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        
+        if (!isPasswordValid) {
+            return null;
+        }
+
+        // Retourner l'utilisateur sans le password
+        return new CompleteUserToken(user.id, user.firstname, user.lastname, user.is_admin, user.email);
     } catch (err) {
         console.error(err);
         return null;
