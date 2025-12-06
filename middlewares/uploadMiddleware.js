@@ -1,20 +1,23 @@
-import { Router } from "express";
 import multer from 'multer';
 import path from 'path';
+import fs from 'fs';
 import { v4 as uuidv4 } from 'uuid';
-
-import * as uploadController from "../controllers/uploadController.js";
-
-const uploadRouter = Router();
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, './public/uploads/');
+        const uploadPath = './public/uploads';
+        
+        // Création du dossier upload si il n'existe pas
+        fs.mkdir(uploadPath, { recursive: true }, (err) => {
+            if (err) return cb(err);
+            cb(null, uploadPath);
+        });
     },
     filename: (req, file, cb) => {
         cb(null, uuidv4() + path.extname(file.originalname));
     }
 });
+
 
 const fileFilter = (req, file, cb) => {
     const allowedFileTypes = /jpeg|jpg|png|webp/;
@@ -33,6 +36,4 @@ const upload = multer({
     fileFilter: fileFilter
 });
 
-uploadRouter.post('/upload', upload.single('file'), uploadController.upload);
-
-export default uploadRouter;
+export const uploadMiddleware = upload.single('file');

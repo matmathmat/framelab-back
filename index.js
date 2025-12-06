@@ -10,12 +10,11 @@ import voteRouter from "./routers/voteRouter.js";
 import userRouter from "./routers/userRouter.js";
 import participationRouter from "./routers/participationRouter.js";
 
-import upploadRouter from "./routers/uploadRouter.js";
-
 // Creation du serveur
 const app = express();
 app.use(cookieParser())
 app.use(express.json());
+app.use(express.urlencoded());
 
 // Routes API
 app.use("/api", commentRouter);
@@ -26,9 +25,6 @@ app.use("/api", participationRouter);
 
 // Exposer le dossier public
 app.use("/", express.static("public"));
-
-// test upload
-app.use("/", upploadRouter);
 
 // Demarrage du serveur sur le port 3000
 app.listen(3000, () => {
