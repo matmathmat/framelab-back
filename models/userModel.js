@@ -73,11 +73,33 @@ export class CompleteUser extends BasicUser {
     );
   }
 
+  static async getByEmailWithPassword(email, password) {
+    const userData = await userService.getUserByEmailWithPassword(email, password);
+
+    if (!userData) {
+      return undefined;
+    }
+    return new CompleteUser(
+      userData.id,
+      userData.firstname,
+      userData.lastname,
+      userData.isAdmin,
+      userData.email
+    );
+  }
+
   static async getUsers(orderBy, startWith, isAdmin) {
     return await userService.getUsers(orderBy, startWith, isAdmin);
   }
 
   static async create(email, password, firstname, lastname) {
     return await userService.addUser(email, password, firstname, lastname);
+  }
+}
+
+export class CompleteUserToken extends CompleteUser {
+  constructor(id, firstname, lastname, isAdmin, email, token) {
+    super(id, firstname, lastname, isAdmin, email);
+    this.token = token;
   }
 }
