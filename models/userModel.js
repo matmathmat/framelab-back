@@ -43,8 +43,8 @@ export class CompleteUser extends BasicUser {
     this.email = email;
   }
   
-  static async getById(userId) {
-    const userData = await userService.getUser(userId);
+  static async getById(userId, isAdmin = false, isMe = false) {
+    const userData = await userService.getUser(userId, isAdmin, isMe);
     
     if (!userData) {
       return undefined;
