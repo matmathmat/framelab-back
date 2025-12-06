@@ -30,6 +30,11 @@ export default class Challenge {
         );
     }
 
+    static async getChallenges(page = 1) {
+        const challenges = await challengeService.getChallenges(page);
+        return challenges;
+    }    
+
     async getParticipations(page) {
         return await getParticipationsByChallengeId(this.id, page);
     }
