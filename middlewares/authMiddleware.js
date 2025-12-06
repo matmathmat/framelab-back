@@ -26,7 +26,7 @@ export async function authentification(request, response, next) {
     }
 
     // On vérifie si le token est banni
-    const isBanned = await BannedToken.isTokenBanned(token);
+    const isBanned = await BannedToken.getByToken(token);
     if (isBanned) {
         return responseUtil.setInvalidToken(response);
     }    
