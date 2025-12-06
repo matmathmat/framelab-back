@@ -4,8 +4,8 @@ import * as userService from "../services/userService.js";
 export async function getUser(request, response) {
     try {
         const userId = request.params.id;
-        const isAdmin = request.isAdmin;
-        const isMe = request.userId == userId;
+        const isAdmin = request.user.isAdmin;
+        const isMe = request.user.id == userId;
 
         if (userId == undefined) {
             return responseUtil.setInvalidRequest(response);
@@ -28,7 +28,7 @@ export async function getUsers(request, response) {
     try {
         const orderBy = request.query.orderBy;
         const startWith = request.query.startWith;
-        const isAdmin = request.isAdmin;
+        const isAdmin = request.user.isAdmin;
 
         const users = await userService.getUsers(orderBy, startWith, isAdmin);
 
@@ -41,7 +41,7 @@ export async function getUsers(request, response) {
 
 export async function getMe(request, response) {
     try {
-        const userId = request.userId;
+        const userId = request.user.id;
 
         if (userId == undefined) {
             return responseUtil.setInvalidRequest(response);
