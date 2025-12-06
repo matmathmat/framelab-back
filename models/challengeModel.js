@@ -12,7 +12,7 @@ export default class Challenge {
         this.isArchived = isArchived;
     }
 
-    static async createChallenge(titleTheme, descriptionTheme, startDate, endDate, photoUrl) {
+    static async create(titleTheme, descriptionTheme, startDate, endDate, photoUrl) {
         return await challengeService.createChallenge(titleTheme, descriptionTheme, startDate, endDate, photoUrl);
     }
 
@@ -52,8 +52,7 @@ export default class Challenge {
     }
 
     static async getChallenges(page = 1) {
-        const challenges = await challengeService.getChallenges(page);
-        return challenges;
+        return await challengeService.getChallenges(page);
     }
 
     async getParticipations(page) {

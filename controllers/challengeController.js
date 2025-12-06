@@ -85,7 +85,7 @@ export async function postChallenge(request, response) {
         // Normalisation du path
         photoUrl = photoUrl.replace(/\\/g, "/");
 
-        const challenge = await Challenge.createChallenge(
+        const challenge = await Challenge.create(
             titleTheme, 
             descriptionTheme, 
             startDate, 
