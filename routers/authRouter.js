@@ -6,7 +6,7 @@ import { login, logout } from "../controllers/authController.js";
 
 const authRouter = Router();
 
-authRouter.get("/auth/login", login);
-authRouter.get("/auth/logout", authentification, logout);
+authRouter.post("/auth/login", login);
+authRouter.post("/auth/logout", authentification, logout);
 
 export default authRouter;
