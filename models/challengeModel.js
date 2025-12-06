@@ -1,5 +1,5 @@
 import * as challengeService from "../services/challengeService.js";
-import { addParticipation, getParticipationsByChallengeId } from "../services/participationService.js";
+import { addParticipation, getParticipationsByChallengeId, getParticipationByChallengeIdAndUserId } from "../services/participationService.js";
 
 export default class Challenge {
     constructor(id, titleTheme, descriptionTheme, photoUrl, startDate, endDate, isArchived) {
@@ -32,6 +32,10 @@ export default class Challenge {
 
     async getParticipations(page) {
         return await getParticipationsByChallengeId(this.id, page);
+    }
+    
+    async getParticipationByUserId(userId) {
+        return await getParticipationByChallengeIdAndUserId(this.id, userId);
     }    
 
     async addParticipation(photoUrl, userId) {
