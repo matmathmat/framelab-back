@@ -1,13 +1,14 @@
 import { Router } from "express";
 
-import * as authController from "../controllers/authController.js";
+import { authentification } from "../middlewares/authMiddleware.js";
 import { uploadMiddleware } from "../middlewares/uploadMiddleware.js";
-import * as participationController from "../controllers/participationController.js";
+
+import { getParticipations, getParticipation, postParticipation } from "../controllers/participationController.js";
 
 const participationRouter = Router();
 
-participationRouter.get("/participations", authController.authentification, participationController.getParticipations);
-participationRouter.get("/participations/:id", authController.authentification, participationController.getParticipation);
-participationRouter.post("/participations", authController.authentification, uploadMiddleware, participationController.postParticipation);
+participationRouter.get("/participations", authentification, getParticipations);
+participationRouter.get("/participations/:id", authentification, getParticipation);
+participationRouter.post("/participations", authentification, uploadMiddleware, postParticipation);
 
 export default participationRouter;

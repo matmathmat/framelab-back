@@ -1,12 +1,13 @@
 import { Router } from "express";
 
-import * as authController from "../controllers/authController.js";
-import * as commentController from "../controllers/commentController.js";
+import { authentification } from "../middlewares/authMiddleware.js";
+
+import { getcomments, getcomment, postComment } from "../controllers/commentController.js";
 
 const commentRouter = Router();
 
-commentRouter.get("/comments", authController.authentification, commentController.getcomments);
-commentRouter.get("/comments/:id", authController.authentification, commentController.getcomment);
-commentRouter.post("/comments", authController.authentification, commentController.postComment);
+commentRouter.get("/comments", authentification, getcomments);
+commentRouter.get("/comments/:id", authentification, getcomment);
+commentRouter.post("/comments", authentification, postComment);
 
 export default commentRouter;
