@@ -7,10 +7,10 @@ export default class BasicUser {
     this.lastname = lastname;
     this.isAdmin = isAdmin;
   }
-  
+
   static async getById(userId) {
     const userData = await userService.getUser(userId);
-    
+
     if (!userData) {
       return undefined;
     }
@@ -24,7 +24,7 @@ export default class BasicUser {
 
   static async getByEmail(email) {
     const userData = await userService.getUserByEmail(email);
-    
+
     if (!userData) {
       return undefined;
     }
@@ -42,10 +42,10 @@ export class CompleteUser extends BasicUser {
     super(id, firstname, lastname, isAdmin);
     this.email = email;
   }
-  
-  static async getById(userId) {
-    const userData = await userService.getUser(userId);
-    
+
+  static async getById(userId, isAdmin = false, isMe = false) {
+    const userData = await userService.getUser(userId, isAdmin, isMe);
+
     if (!userData) {
       return undefined;
     }
@@ -60,7 +60,7 @@ export class CompleteUser extends BasicUser {
 
   static async getByEmail(email) {
     const userData = await userService.getUserByEmail(email);
-    
+
     if (!userData) {
       return undefined;
     }
@@ -71,5 +71,13 @@ export class CompleteUser extends BasicUser {
       userData.isAdmin,
       userData.email
     );
+  }
+
+  static async getUsers(orderBy, startWith, isAdmin) {
+    return await userService.getUsers(orderBy, startWith, isAdmin);
+  }
+
+  static async create(email, password, firstname, lastname) {
+    return await userService.addUser(email, password, firstname, lastname);
   }
 }

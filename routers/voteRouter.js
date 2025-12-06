@@ -1,12 +1,13 @@
 import { Router } from "express";
 
-import * as authController from "../controllers/authController.js";
-import * as voteController from "../controllers/voteController.js";
+import { authentification } from "../middlewares/authMiddleware.js";
+
+import { getVotes, getVote, postVote } from "../controllers/voteController.js";
 
 const voteRouter = Router();
 
-voteRouter.get("/votes", authController.authentification, voteController.getVotes);
-voteRouter.get("/votes/:id", authController.authentification, voteController.getVote);
-voteRouter.post("/votes", authController.authentification, voteController.postVote);
+voteRouter.get("/votes", authentification, getVotes);
+voteRouter.get("/votes/:id", authentification, getVote);
+voteRouter.post("/votes", authentification, postVote);
 
 export default voteRouter;

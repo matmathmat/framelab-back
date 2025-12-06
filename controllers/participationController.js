@@ -6,7 +6,7 @@ import Challenge from "../models/challengeModel.js";
 export async function getParticipation(request, response) {
     try {
         const participationId = request.params.id;
-        const userId = request.userId;
+        const userId = request.user.id;
 
         if (participationId == undefined || userId == undefined) {
             return responseUtil.setInvalidRequest(response);
@@ -29,9 +29,7 @@ export async function getParticipations(request, response) {
     try {
         const challengeId = request.query.challengeId;
         const selectedPage = request.query.page;
-        const userId = request.userId;
-
-        console.log(challengeId, selectedPage, userId);
+        const userId = request.user.id;
 
         if (challengeId == undefined || userId == undefined) {
             return responseUtil.setInvalidRequest(response);
@@ -59,7 +57,7 @@ export async function postParticipation(request, response) {
         }
         
         const challengeId = request.body.challengeId;
-        const userId = request.userId;
+        const userId = request.user.id;
         let photoUrl = request.file;
 
         if (challengeId == undefined || userId == undefined || photoUrl == undefined) {

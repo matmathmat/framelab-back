@@ -12,9 +12,13 @@ export default class Challenge {
         this.isArchived = isArchived;
     }
 
+    static async create(titleTheme, descriptionTheme, startDate, endDate, photoUrl) {
+        return await challengeService.createChallenge(titleTheme, descriptionTheme, startDate, endDate, photoUrl);
+    }
+
     static async getById(challengeId) {
         const challengeData = await challengeService.getChallenge(challengeId);
-        
+
         if (!challengeData) {
             return undefined;
         }
@@ -30,13 +34,34 @@ export default class Challenge {
         );
     }
 
+    static async getActiveChallenge() {
+        const challengeData = await challengeService.getActiveChallenge();
+
+        if (!challengeData) {
+            return undefined;
+        }
+        return new Challenge(
+            challengeData.id,
+            challengeData.titleTheme,
+            challengeData.descriptionTheme,
+            challengeData.photoUrl,
+            challengeData.startDate,
+            challengeData.endDate,
+            challengeData.isArchived,
+        );
+    }
+
+    static async getChallenges(page = 1) {
+        return await challengeService.getChallenges(page);
+    }
+
     async getParticipations(page) {
         return await getParticipationsByChallengeId(this.id, page);
     }
-    
+
     async getParticipationByUserId(userId) {
         return await getParticipationByChallengeIdAndUserId(this.id, userId);
-    }    
+    }
 
     async addParticipation(photoUrl, userId) {
         return await addParticipation(this.id, photoUrl, userId);

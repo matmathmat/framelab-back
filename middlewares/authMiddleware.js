@@ -1,7 +1,7 @@
 import { verifyToken } from "../utils/tokenUtil.js";
 import * as responseUtil from "../utils/responseUtil.js";
 
-import BasicUser from "../models/userModel.js";
+import { CompleteUser } from '../models/userModel.js';
 
 export async function authentification(request, response, next) {
     // On cherche le token dans les cookies
@@ -44,16 +44,23 @@ export async function authentification(request, response, next) {
     const userId = tokenData['userId'];
 
     // On verifie que l'utilisateur existe
-    const user = await BasicUser.getById(userId);
+    const user = await CompleteUser.getById(userId, false, true);
     if (!user) {
         return responseUtil.setInvalidToken(response);
     }
     
     // Si on a passé toutes ces étapes ça signifie que l'utilisateur existe
-    // on ajoute l'user id à la request
-    request.userId = user.id;
-    request.isAdmin = user.isAdmin;
+    // on ajoute l'user à la request
+    request.user = user;
     
     // fin du middlewar
     next();
 }
+
+export const requireAdmin = (request, response, next) => {
+    if (!request.user.isAdmin) {
+        return responseUtil.setUnauthorizedUser(response);
+    }
+
+    next();
+};

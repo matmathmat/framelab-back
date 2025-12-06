@@ -1,6 +1,6 @@
-import { addComment } from "../services/commentService.js";
-import { addVote, getVoteByParticipationIdAndUserId } from "../services/voteService.js";
-import * as participationService from "../services/participationService.js";
+import { getCommentsByParticipationId, addComment } from "../services/commentService.js";
+import { getVotesByParticipationId, getVoteByParticipationIdAndUserId, addVote } from "../services/voteService.js";
+import { getParticipation } from "../services/participationService.js";
 
 export default class Participation {
     constructor(id, photoUrl, submissionDate, isVisible, user) {
@@ -12,8 +12,8 @@ export default class Participation {
     }
 
     static async getById(participationId) {
-        const participationData = await participationService.getParticipation(participationId);
-        
+        const participationData = await getParticipation(participationId);
+
         if (!participationData) {
             return undefined;
         }
@@ -33,6 +33,14 @@ export default class Participation {
 
     async addVote(creativityNote, technicNote, respectNote, userId) {
         return await addVote(this.id, creativityNote, technicNote, respectNote, userId);
+    }
+
+    async getComments(page) {
+        return await getCommentsByParticipationId(this.id, page);
+    }
+
+    async getVotes() {
+        return await getVotesByParticipationId(this.id);
     }    
 
     async getVoteByParticipationIdAndUserId(userId) {
