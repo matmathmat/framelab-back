@@ -18,7 +18,6 @@ export async function getChallenge(challengeId) {
         const row = await db.get(query, [challengeId]);
 
         if (row != undefined) {
-            let basicUser = new BasicUser(row.user_id, row.firstname, row.lastname, row.is_admin);
             return new Challenge(
                 row.id,
                 row.title_theme,
@@ -27,7 +26,6 @@ export async function getChallenge(challengeId) {
                 row.start_date,
                 row.end_date,
                 row.is_archived,
-                basicUser
             );
         } else {
             return null;
@@ -35,5 +33,42 @@ export async function getChallenge(challengeId) {
     } catch (err) {
         console.error(err);
         return null;
+    }
+}
+
+export async function getChallenges(page = 1) {
+    try {
+        const offset = (page - 1) * 20;
+
+        const query = `
+        SELECT
+            challenges.id, challenges.title_theme, challenges.description_theme, challenges.photo_url, challenges.start_date, challenges.end_date, challenges.is_archived
+        FROM
+            challenges
+        LIMIT 20
+        OFFSET ?
+        `;
+
+        const db = await getDB();
+
+        let challenges = [];
+
+        await db.each(query, [offset], (err, row) => {
+            const challenge = new Challenge(
+                row.id,
+                row.title_theme,
+                row.description_theme,
+                row.photo_url,
+                row.start_date,
+                row.end_date,
+                row.is_archived,
+            );
+            challenges.push(challenge);
+        });
+
+        return challenges;
+    } catch (err) {
+        console.error(err);
+        return [];
     }
 }
